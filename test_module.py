@@ -1,19 +1,46 @@
 import unittest
-from mean_var_std import calculate
+from demographic_data_analyzer import calculate_demographic_data
 
-class UnitTests(unittest.TestCase):
-    def test_calculate(self):
-        self.assertEqual(calculate([0, 1, 2, 3, 4, 5, 6, 7, 8]), {
-            'mean': [[3.0, 4.0, 5.0], [1.0, 4.0, 7.0], 4.0],
-            'variance': [[6.0, 6.0, 6.0], [0.6666666666666666, 0.6666666666666666, 0.6666666666666666], 6.666666666666667],
-            'standard deviation': [[2.449489742783178, 2.449489742783178, 2.449489742783178], [0.816496580927726, 0.816496580927726, 0.816496580927726], 2.581988897471611],
-            'max': [[6, 7, 8], [2, 5, 8], 8],
-            'min': [[0, 1, 2], [0, 3, 6], 0],
-            'sum': [[9, 12, 15], [3, 12, 21], 36]
-        })
-        
-        with self.assertRaises(ValueError):
-            calculate([1, 2, 3, 4, 5, 6, 7, 8])
+class DemographicAnalyzerTestCase(unittest.TestCase):
+    def setUp(self):
+        self.results = calculate_demographic_data(print_data=False)
 
-if __name__ == "__main__":
+    def test_race_count(self):
+        expected = {
+            'White': 27816,
+            'Black': 3124,
+            'Asian-Pac-Islander': 1039,
+            'Amer-Indian-Eskimo': 311,
+            'Other': 271
+        }
+        self.assertEqual(self.results['race_count'].to_dict(), expected)
+
+    def test_average_age_men(self):
+        self.assertEqual(self.results['average_age_men'], 39.4)
+
+    def test_percentage_bachelors(self):
+        self.assertEqual(self.results['percentage_bachelors'], 16.4)
+
+    def test_higher_education_rich(self):
+        self.assertEqual(self.results['higher_education_rich'], 46.5)
+
+    def test_lower_education_rich(self):
+        self.assertEqual(self.results['lower_education_rich'], 17.4)
+
+    def test_min_work_hours(self):
+        self.assertEqual(self.results['min_work_hours'], 1)
+
+    def test_rich_percentage(self):
+        self.assertEqual(self.results['rich_percentage'], 10.0)
+
+    def test_highest_earning_country(self):
+        self.assertEqual(self.results['highest_earning_country'], 'Iran')
+
+    def test_highest_earning_country_percentage(self):
+        self.assertEqual(self.results['highest_earning_country_percentage'], 41.9)
+
+    def test_top_IN_occupation(self):
+        self.assertEqual(self.results['top_IN_occupation'], 'Prof-specialty')
+
+if __name__ == '__main__':
     unittest.main()
